@@ -1,0 +1,15 @@
+已解决： url带中文参数的话IE不支持，需要中文转码 encodeURI("中文名称")
+已解决： 主界面应该有一个文本框显示用户名，还有一个退出登录按钮
+还有其他方案： 存储用户数据的解决方案暂定cookie
+已解决：一个项目需要存储用户信息，可以使用多个cookie,此时必须设置路径，setpath("项目名称")，否则cookie只能在当前request和response
+中使用，不能持久化
+已解决： IE中出现两个相同key的cookie，发现是路径不同，其实他们并不一样，由此可见，域名，路径，key三个确定一个cookie
+已解决：删除cookie不成功的问题，是因为域名，路径，key三个确定一个cookie，如果增加cookie时设置过路径和域名，那么删除cookie时必须重新设置
+路径和域名（原因：增加cookie是request.addCookie方法，设置路径后路径不为空，可是request.getCookies方法发现，路径变成空了，实际上
+在判断cookie是否过期的时候，我除了判断能不能拿到cookie外，还加了getMaxAge是否大于0的判定方法，后来发现这样就有问题了，getMaxAge返回的值总是-1，其他信息除了name和value外都是一样的值。
+发现Cookie从服务器端发送到客户端时，信息是完整的，Cookie从客户器端发送到服务端时，信息只剩下key、value了。后来想了一下 ，域不对的Cookie、路径不对的Cookie、过期的Cookie，客户端是不会发送过来的，所以在设置了cookie后，发送到客户端，下一次获取的时候就只能获取key和Value的值了。
+以后只需要判断cookie的name是否匹配就能验证cookie是否存在了，如果要更新cookie,除了设置相同的名字外，还要设置相同的域和path名；删除cookie,除了设置MaxAge=0外，还要设置相同的域和path名）
+已解决：easyui-tabs加入iframe出现竖直滚动条，这是浏览器兼容性问题，ie9之前不行
+目前数据加载趋势：滚动代替分页
+
+这个很重要,一定要测试：手动管理事务与spring管理事务在运行速度上的区别。

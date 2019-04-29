@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="    
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd  
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd  
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<!-- 配置ApplicationContext获取类 -->
+	<bean id="applicationContextUtil" class="utils.ApplicationContextUtil" lazy-init="false"></bean>
+	
+	<!-- 配置Dao -->
+	<bean id="classCourseTeacherDao" class="com.business.dao.impl.ClassCourseTeacherDaoImpl"></bean>
+	<bean id="classDao" class="com.business.dao.impl.ClassDaoImpl"></bean>
+	<bean id="courseDao" class="com.business.dao.impl.CourseDaoImpl"></bean>
+	<bean id="gradeDao" class="com.business.dao.impl.GradeDaoImpl"></bean>
+	<bean id="schoolDao" class="com.business.dao.impl.SchoolDaoImpl"></bean>
+	<bean id="scoreDao" class="com.business.dao.impl.ScoreDaoImpl"></bean>
+	<bean id="studentDao" class="com.business.dao.impl.StudentDaoImpl"></bean>
+	<bean id="teacherDao" class="com.business.dao.impl.TeacherDaoImpl"></bean>
+	<bean id="testDao" class="com.business.dao.impl.TestDaoImpl"></bean>
+	<bean id="userDao" class="com.business.dao.impl.UserDaoImpl"></bean>
+	<bean id="menuPowerDao" class="com.business.dao.impl.MenuPowerDaoImpl"></bean>
+	
+	<!-- 配置service -->
+	<bean id="classCourseTeacherService" class="com.business.service.impl.ClassCourseTeacherServiceImpl">
+	    <property name="classCourseTeacherDao" ref="classCourseTeacherDao"></property>
+	</bean>
+	<bean id="classService" class="com.business.service.impl.ClassServiceImpl">
+	    <property name="classDao" ref="classDao"></property>
+	</bean>
+	<bean id="courseService" class="com.business.service.impl.CourseServiceImpl">
+		<property name="courseDao" ref="courseDao"></property>
+	</bean>
+	<bean id="gradeService" class="com.business.service.impl.GradeServiceImpl">
+		<property name="gradeDao" ref="gradeDao"></property>
+	</bean>
+	<bean id="schoolService" class="com.business.service.impl.SchoolServiceImpl">
+		<property name="schoolDao" ref="schoolDao"></property>
+	</bean>
+	<bean id="scoreService" class="com.business.service.impl.ScoreServiceImpl">
+		<property name="scoreDao" ref="scoreDao"></property>
+	</bean>
+	<bean id="studentService" class="com.business.service.impl.StudentServiceImpl">
+		<property name="studentDao" ref="studentDao"></property>
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="teacherService" class="com.business.service.impl.TeacherServiceImpl">
+		<property name="teacherDao" ref="teacherDao"></property>
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="testService" class="com.business.service.impl.TestServiceImpl">
+		<property name="testDao" ref="testDao"></property>
+	</bean>
+	<bean id="userService" class="com.business.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="modifyPasswordService" class="com.business.service.impl.ModifyPasswordServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+		<bean id="loginService" class="com.business.service.impl.LoginServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="gradeClassService" class="com.business.service.impl.GradeClassServiceImpl">
+		<property name="gradeDao" ref="gradeDao"></property>
+		<property name="classDao" ref="classDao"></property>
+	</bean>
+	<bean id="gradeClassCourseService" class="com.business.service.impl.GradeClassCourseServiceImpl">
+		<property name="gradeDao" ref="gradeDao"></property>
+		<property name="classDao" ref="classDao"></property>
+		<property name="courseDao" ref="courseDao"></property>
+	</bean>
+	<bean id="menuPowerService" class="com.business.service.impl.MenuPowerServiceImpl">
+		<property name="menuPowerDao" ref="menuPowerDao"></property>
+	</bean>
+</beans>

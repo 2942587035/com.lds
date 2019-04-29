@@ -1,0 +1,6 @@
+ConnectorDBTest： 连接mysql测试
+OneCacheTest： 一级缓存测试
+SecondCacheTest： 二级缓存测试
+QueryCacheTest： 查询缓存测试
+1.一级缓存和二级缓存都是对象缓存，但是一级缓存中得到的两个对象相等，二级缓存不同session得到的两个对象不相等。
+2.查询缓存在创建createSQLQuery缓存时如果不加addEntity会报错。

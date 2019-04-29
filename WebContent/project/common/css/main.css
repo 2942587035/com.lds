@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+#table{
+    margin: 10px;
+}
+
+.label{
+    width: 80px;
+    height: 24px;
+    text-align: right;
+}
+
+.text{
+    width: 150px;
+    height: 24px;
+}
+
+.noDisplay{
+	display:none;
+}
+
+.disableInputMethod{
+	ime-mode:disabled;
+}

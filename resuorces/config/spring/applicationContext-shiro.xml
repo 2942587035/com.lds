@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="    
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd  
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd  
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<!-- 数据库保存的密码是使用MD5算法加密的，所以这里需要配置一个密码匹配对象 -->
+	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.Md5CredentialsMatcher"></bean>
+
+	<!--1. Shiro安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="cacheManager" ref="cacheManager"></property>
+		<property name="realm" ref="shiroRealm"></property>
+		<!-- <property name="authenticator">
+		    <ref="authenticator"/>
+		</property> -->
+        <!--<property name="realms">
+	        <list>
+	            <ref bean="shiroRealm"/>
+	        </list>
+	    </property> -->
+	</bean>
+	
+	<!--2. 缓存管理 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+	    <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>
+	</bean>
+	
+	<!-- 多realm配置 -->
+	<!-- <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+	</bean> -->
+	
+	<!--3. 配置realm -->
+	<bean id="shiroRealm" class="com.shiro.realm.ShiroRealm">
+	    <property name="userService" ref="userService"></property>
+		<property name="credentialsMatcher">
+			<bean
+				class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<property name="hashAlgorithmName" value="MD5"></property> 
+				<property name="hashIterations" value="1"></property> 
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 4.LifecycleBeanPostProcessor -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+
+    <!-- 5.启用shiro注解  -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+    depends-on="lifecycleBeanPostProcessor" />
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+    
+    <!-- 6.shiroFilter -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<property name="loginUrl" value="/project/module/login/jsp/login.jsp"></property>
+		<!-- <property name="successUrl" value="/" ></property> --> 
+		<!-- 没有权限页面 -->
+		<property name="unauthorizedUrl" value="/"></property>
+		<property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>
+		<!--  
+		    配置哪些页面需要受保护
+		    以及访问页面需要的权限
+		    1）anon 可以被匿名访问
+		    2）必须认证之后（即登陆）才能访问的页面
+		    3）认证或者记住我
+		-->
+		<!-- <property name="filterChainDefinitions">
+			<value>
+			    这些最好配置在数据库中 
+				/project/module/login/** = anon
+				/project/module/** = authc
+			</value>
+		</property> -->
+	</bean>
+	<!-- 替换filterChainDefinitions -->
+	<bean id="filterChainDefinitionMap"
+	    factory-bean="filterChainDefinitionMapBuilder"
+	    factory-method="buildFilterChainDefinitionMap">
+	</bean>
+	<bean id="filterChainDefinitionMapBuilder"
+	    class="com.shiro.factory.FilterChainDefinitionMapBuilder">
+	</bean>
+
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+</beans>
